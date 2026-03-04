@@ -1,19 +1,27 @@
-const express = require('express');
+const express = require("express");
+const path = require("path");
+
 const app = express();
-const path = require('path');
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.post('/api/bookings', (req, res) => {
-    console.log('Received booking data:', req.body);
-    // In a real application, you would save this to a database
-    setTimeout(() => {
-        res.status(200).json({ success: true, message: 'Booking received successfully' });
-    }, 800); // Simulate network delay
+// Serve static files from public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// API Route
+app.post("/api/bookings", (req, res) => {
+  console.log("Received booking data:", req.body);
+
+  // Simulate processing delay
+  setTimeout(() => {
+    res.status(200).json({
+      success: true,
+      message: "Booking received successfully",
+    });
+  }, 800);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+// IMPORTANT: Export app for Vercel
+module.exports = app;
